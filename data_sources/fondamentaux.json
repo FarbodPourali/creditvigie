@@ -1,0 +1,109 @@
+{
+  "periode": "S1 2026 (30/06/2026)",
+  "collecte": "2026-10-17",
+  "methode": "Chiffres relevés dans les publications semestrielles des émetteurs (communiqués, rapports, 10-Q). Lorsqu'un chiffre provient d'une source secondaire, il est signalé.",
+  "banques": [
+    {
+      "id": "BNP PARIBAS",
+      "cet1": 13.0, "exigence_cet1": 10.43, "levier": 4.4, "lcr": 149, "nsfr": null,
+      "npl_brut": 1.6, "npl_net": null, "couverture": 66.4, "cout_risque": 39, "rote": 13.3,
+      "resultat": "Résultat net T2 2026 : 4 345 M€ (+33,4 %), dont plus-value exceptionnelle de 858 M€",
+      "lecture": "Coussin CET1 de ~260 pb au-dessus du SREP, plus étroit que les pairs mais habituel pour un G-SIB ; objectif de 13 % pour 2027 déjà atteint. Qualité d'actifs stable (coût du risque < 40 pb).",
+      "sources": [{"titre": "Communiqué de résultats T2 2026", "url": "https://invest.bnpparibas/en/document/2q26-pr"}]
+    },
+    {
+      "id": "MONTE DEI PASCHI",
+      "cet1": 16.3, "exigence_cet1": null, "coussin_publie": 680, "levier": 6.5, "lcr": 169, "nsfr": 122,
+      "npl_brut": 2.5, "npl_net": 1.2, "couverture": 50.6, "cout_risque": 39, "rote": 9.5,
+      "resultat": "Résultat net S1 2026 : plus de 1,1 Md€ (+25,3 %), Mediobanca consolidée ligne à ligne",
+      "lecture": "Le coussin le plus large du panel (~680 pb, CET1 hors résultat de la période). Solidité qui rend MPS attractive pour un acquéreur ; la revue des options stratégiques est en cours.",
+      "sources": [{"titre": "Communiqué de résultats S1 2026", "url": "https://gruppomps.it/static/upload/pr-/pr-financial-results-2q26-hy26.pdf"}]
+    },
+    {
+      "id": "INTESA SANPAOLO",
+      "cet1": 13.1, "exigence_cet1": 9.96, "levier": null, "lcr": 138, "nsfr": 120,
+      "npl_brut": 1.8, "npl_net": 0.9, "couverture": 50.1, "cout_risque": 20, "rote": null,
+      "resultat": "Résultat net S1 2026 : 5,6 Md€ (+6,5 %), objectif 2026 relevé à plus de 10 Md€",
+      "lecture": "CET1 de 13,1 % après déduction des distributions et du rachat d'actions de juillet (13,8 % avec les DTA). MREL de 36 % contre 26,1 % exigés. Bilan très propre (NPL net 0,9 %).",
+      "notes": "LCR et NSFR : moyennes sur 12 mois.",
+      "sources": [{"titre": "Communiqué de résultats S1 2026", "url": "https://group.intesasanpaolo.com/content/dam/portalgroup/repository-documenti/investor-relations/comunicati-stampa-en/2026/07/20260729_Ris1H26_uk.pdf"}]
+    },
+    {
+      "id": "CAIXABANK",
+      "cet1": 12.5, "exigence_cet1": null, "levier": 5.6, "lcr": 184, "nsfr": 143,
+      "npl_brut": 1.78, "npl_net": null, "couverture": 81, "cout_risque": 24, "rote": 18.0,
+      "resultat": "Résultat net S1 2026 : 3 203 M€ (+8,5 %)",
+      "lecture": "Liquidité la plus abondante du panel (LCR 184 %). CET1 de 12,5 % incluant l'impact de 20 pb du huitième programme de rachat. NPL en baisse de 29 pb sur un an.",
+      "sources": [{"titre": "Communiqué de résultats S1 2026", "url": "https://www.caixabank.com/StaticFiles/pdfs/260729_OIR_Nota_prensa_1S26_en.pdf"}]
+    },
+    {
+      "id": "UNICREDIT SPA",
+      "cet1": 14.3, "exigence_cet1": null, "levier": 5.1, "lcr": 140, "nsfr": 124,
+      "npl_brut": 2.5, "npl_net": 1.4, "couverture": 45.9, "cout_risque": 17, "rote": 23.7,
+      "resultat": "Résultat net S1 2026 : 6,3 Md€",
+      "lecture": "CET1 de 14,3 % aujourd'hui, mais la consolidation de Commerzbank coûterait environ 200 pb : CET1 pro forma attendu autour de 13 %, dans le haut de la cible de gestion (12,5-13 %). Point clé pour les porteurs des deux émetteurs.",
+      "notes": "LCR et NSFR : données de gestion (« circa »).",
+      "sources": [{"titre": "Communiqué de résultats T2 2026", "url": "https://www.emarketstorage.it/sites/default/files/comunicati/2026-07/20260723_187118.pdf"}]
+    },
+    {
+      "id": "BANCO BILBAO VIZ",
+      "cet1": 12.9, "exigence_cet1": 8.98, "levier": 6.0, "lcr": null, "nsfr": null,
+      "npl_brut": 2.6, "npl_net": null, "couverture": 85, "cout_risque": null, "rote": null,
+      "resultat": "MREL : 29,96 % des RWA contre 23,94 % exigés",
+      "notations": "Moody's A2 · S&P A+ · Fitch A · DBRS A (high)",
+      "lecture": "Coussin CET1 confortable (~390 pb au-dessus du SREP), au-dessus de la cible de gestion de 11,5-12 %. Notations de crédit élevées, perspectives stables (positive chez DBRS).",
+      "sources": [{"titre": "Rapport T2 2026 : capital", "url": "https://shareholdersandinvestors.bbva.com/informes/2q26-report-group-capital-shareholders/"}, {"titre": "Données financières (NPL)", "url": "https://shareholdersandinvestors.bbva.com/financials/financial-data/"}]
+    }
+  ],
+  "entreprises": [
+    {
+      "id": "ENEL SPA", "devise": "€",
+      "ebitda_s1": 11838, "ebitda_libelle": "EBITDA ordinaire S1", "dette_nette": 61011, "dette_nette_prec": 57182,
+      "dn_ebitda": 2.6, "dn_ebitda_note": "dette nette / milieu de la fourchette d'EBITDA ordinaire 2026 (23,1-23,6 Md€)",
+      "cash_flow": "FFO récurrent S1 : ~6,1 Md€", "investissements": null, "liquidite": null,
+      "lecture": "Dette nette en hausse de 3,8 Md€ sur le semestre (investissements, dividendes, change et décret « bollette » pour 1,2 Md€, jugé temporaire). Levier stable autour de 2,6x, cohérent avec la notation. Accès au marché intact : émissions hybrides en janvier, 2,5 Md€ de seniors 2030/2033 et 2,5 Md$ en juillet.",
+      "sources": [{"titre": "Communiqué de résultats S1 2026", "url": "https://www.emarketstorage.it/sites/default/files/comunicati/2026-07/20260730_187538.pdf"}]
+    },
+    {
+      "id": "ELEC DE FRANCE", "devise": "€",
+      "ebitda_s1": 14100, "ebitda_libelle": "EBITDA S1", "ebitda_prec": 15500, "dette_nette": 51500, "dette_nette_prec": 51500,
+      "dn_ebitda": 1.8, "dn_ebitda_note": "ratio publié par EDF",
+      "cash_flow": "Cash-flow S1 : 1,1 Md€ (4,3 Md€ au S1 2025)", "investissements": "Investissements nets S1 : 11,4 Md€", "liquidite": null,
+      "lecture": "EBITDA en recul (prix de marché bas, canicules) et prévision 2026 abaissée à environ -10 %. Dette stable à 51,5 Md€, objectif 2027 EFN/EBITDA ≤ 2,5x confirmé. Actionnaire unique : l'État, soutien implicite fort.",
+      "sources": [{"titre": "Communiqué de résultats semestriels 2026", "url": "https://www.edf.fr/groupe-edf/espaces-dedies/journalistes/tous-les-communiques-de-presse/resultats-semestriels-2026"}]
+    },
+    {
+      "id": "IBERDROLA FIN SA", "devise": "€",
+      "ebitda_s1": 8050, "ebitda_libelle": "EBITDA ajusté S1", "dette_nette": 54000, "dette_nette_prec": null,
+      "dn_ebitda": null, "ffo_dn": 22.4,
+      "cash_flow": "FFO ajusté / dette nette : 22,4 %", "investissements": "Investissements S1 : 7 Md€ (+25 %)", "liquidite": 21500, "liquidite_note": "22 mois de besoins couverts",
+      "lecture": "Croissance tirée par les réseaux (Royaume-Uni, États-Unis, Brésil). Dette nette en hausse (~54 Md€, ~56 Md€ attendus fin 2026), mais FFO/dette de 22,4 % cohérent avec la notation BBB+. Liquidité très confortable.",
+      "secondaire": true,
+      "sources": [{"titre": "Synthèse des résultats S1 2026 (Quartr)", "url": "https://quartr.com/events/iberdrola-s-a-ibe-q2-2026_3Y5173kZ"}]
+    },
+    {
+      "id": "ALPHABET INC", "devise": "$",
+      "ebitda_s1": 94052, "ebitda_libelle": "Résultat opérationnel + amortissements S1", "dette_nette": -144309, "dette_nette_prec": null,
+      "dette_brute": 98165, "dette_brute_prec": 46547, "dn_ebitda": null,
+      "cash_flow": "Flux opérationnel S1 : 84,9 Md$ ; capex S1 : 80,6 Md$ ; FCF S1 : ~4,3 Md$", "investissements": "Capex 2026 attendu : 195-205 Md$", "liquidite": 242474, "liquidite_note": "trésorerie et titres de placement",
+      "lecture": "Trésorerie nette de ~144 Md$, mais la dette à long terme a plus que doublé en six mois (46,5 → 98,2 Md$, 56,2 Md$ émis au S1) pour financer les data centers de l'IA. Le flux de trésorerie libre est quasi nul. C'est le thème « l'IA devient un sujet crédit » : un risque d'offre de papier sur les spreads plus qu'un risque de solvabilité.",
+      "notes": "Capex 2026 : source secondaire.",
+      "sources": [{"titre": "Formulaire 10-Q au 30/06/2026 (SEC)", "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm"}]
+    },
+    {
+      "id": "CELLNEX TELECOM", "devise": "€",
+      "ebitda_s1": 1231, "ebitda_libelle": "EBITDA après loyers S1", "dette_nette": null, "dn_ebitda": null,
+      "cash_flow": "RLFCF S1 : 908 M€ (+11 %) ; FCF S1 : 301 M€ (19 M€ au S1 2025)", "investissements": null, "liquidite": 5300, "liquidite_note": "2,0 Md€ de trésorerie + 3,3 Md€ de lignes non tirées",
+      "dette_info": "Coût moyen 2,1 %, maturité moyenne 4,3 ans, 78 % à taux fixe (mars 2026) ; échéances 2026-2028 largement couvertes par les lignes de crédit",
+      "lecture": "Le profil le plus levé du panel (cible de levier 5-6x selon la direction), mais le flux de trésorerie libre devient nettement positif et la dette est longue et à taux fixe. Rachats d'actions (200 M€ supplémentaires) à surveiller côté créanciers.",
+      "secondaire": true,
+      "sources": [{"titre": "Résultats S1 2026 (Advanced Television)", "url": "https://www.advanced-television.com/2026/07/31/cellnex-h1-results-revenues-up-5/"}, {"titre": "Résultats T1 2026 (Cellnex)", "url": "https://www.cellnex.com/app/uploads/2026/04/2026.04.29-Q1-Results-Cellnex.pdf"}]
+    }
+  ],
+  "points_cles": [
+    "Alphabet : dette à long terme multipliée par plus de deux en six mois (98 Md$) pour financer l'IA ; trésorerie nette toujours très positive, flux libre quasi nul.",
+    "UniCredit : la consolidation de Commerzbank ramènerait le CET1 d'environ 14,3 % à ~13 %, dans le haut de la cible de gestion.",
+    "Monte dei Paschi : coussin de capital le plus large du panel (~680 pb), ce qui la rend attractive pour un acquéreur comme Intesa.",
+    "EDF : EBITDA en recul et prévision 2026 abaissée ; levier encore bas (1,8x) et soutien de l'État."
+  ]
+}

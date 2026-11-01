@@ -1,0 +1,51 @@
+{
+  "semaine": "2026-10-16",
+  "statut": "Analyse préparée manuellement pour le prototype. Dans la version automatisée, ce fichier est produit chaque semaine par le moteur (veille.py + Claude).",
+  "a_retenir": [
+    "Consolidation bancaire italienne : l'offre d'Intesa sur Monte dei Paschi pourrait réunir deux émetteurs importants de l'univers ; les expositions s'additionneraient.",
+    "UniCredit obtient le feu vert de la BCE pour le rachat de Commerzbank ; la consolidation coûterait environ 200 pb de CET1 à UniCredit.",
+    "Contexte de taux : taux souverain AAA à 2 ans à {taux_2a}, spread OAT-Bund à 10 ans à {oat_bund} en {oat_bund_mois} ({oat_bund_var} sur le mois). Sur des maturités courtes, le portage reste le principal amortisseur."
+  ],
+  "alertes": [
+    {
+      "niveau": "alerte",
+      "emetteurs": [
+        "INTESA SANPAOLO",
+        "MONTE DEI PASCHI"
+      ],
+      "fusion": true,
+      "titre": "Intesa Sanpaolo / Monte dei Paschi",
+      "texte": "Si l'offre d'Intesa aboutit, les deux émetteurs n'en feraient plus qu'un : l'exposition d'un portefeuille aux deux noms s'additionne et peut franchir le seuil de 5 % de la règle UCITS 5/10/40. Pour les porteurs de la dette MPS, l'adossement à un émetteur mieux noté serait plutôt positif.",
+      "sources": "Reuters, Financial Times, Investing.com · 14–15/10"
+    },
+    {
+      "niveau": "suivre",
+      "emetteurs": [
+        "UNICREDIT SPA",
+        "COMMERZBANK AG"
+      ],
+      "fusion": true,
+      "titre": "UniCredit / Commerzbank",
+      "texte": "Feu vert de la BCE au rachat de Commerzbank. Pour UniCredit, la consolidation coûterait environ 200 pb de CET1 (pro forma ~13 %). Pour la dette Commerzbank, l'effet dépend du rang dans la structure de capital.",
+      "sources": "Zonebourse, TradingView · cette semaine ; communiqué UniCredit T2 2026"
+    },
+    {
+      "niveau": "suivre",
+      "emetteurs": [
+        "MONTE DEI PASCHI",
+        "BANCO BPM SPA"
+      ],
+      "titre": "Monte dei Paschi : assemblée du 29 octobre",
+      "texte": "ISS et Glass Lewis recommandent de rejeter les offres sur Banco BPM et Banca Generali ainsi que le dividende exceptionnel. Un dividende exceptionnel réduirait le coussin de capital, défavorable aux créanciers.",
+      "sources": "Reuters, Zonebourse · 14/10"
+    },
+    {
+      "niveau": "suivre",
+      "emetteurs": [],
+      "pays": "France",
+      "titre": "Spread OAT-Bund à {oat_bund} ({oat_bund_var} en {oat_bund_mois})",
+      "texte": "Les émetteurs français, en particulier les banques (BNP Paribas, Crédit Agricole, Société Générale, BPCE), restent sensibles à l'écart de taux entre la France et l'Allemagne.",
+      "sources": "BCE, taux à 10 ans France et Allemagne (moyenne mensuelle)"
+    }
+  ]
+}

@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CreditVigie · Univers euro court terme</title>
+<style>
+:root{--ink:#16202b;--muted:#5d6875;--faint:#8a94a0;--line:#e3e8ee;--bg:#f4f6f9;--card:#fff;--navy:#0b3a5b;--blue:#2f6fae;--blue2:#9dbbe0;
+--red:#b3261e;--redbg:#fbe9e7;--amber:#a86200;--amberbg:#fdf1dc;--green:#2e7d4f;--greenbg:#e5f3ea;--panel:#f7f9fb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+.top{background:var(--navy);color:#fff;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top b{font-size:17px;font-weight:600}.top .meta{font-size:12px;opacity:.85}
+.top button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+nav{background:#fff;border-bottom:1px solid var(--line);padding:0 28px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:12px 14px;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--navy);border-color:var(--navy);font-weight:600}
+.panel{display:none;padding:20px 28px;max-width:1360px}.panel.on{display:block}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:1.35fr 1fr}.g2e{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.mt{margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+h3{margin:0 0 12px;font-size:14px;font-weight:600}h3 small{font-weight:400;color:var(--faint);margin-left:6px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.kpi p{margin:0;font-size:12px;color:var(--muted)}.kpi div{font-size:22px;font-weight:600;margin-top:2px}.kpi em{font-style:normal;font-size:11px;color:var(--faint)}
+.alert{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--line)}.alert:first-of-type{border-top:0}
+.pill{font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;white-space:nowrap;display:inline-block;align-self:flex-start;line-height:1.3}
+.alerte{background:var(--redbg);color:var(--red)}.suivre{background:var(--amberbg);color:var(--amber)}.ras{background:var(--greenbg);color:var(--green)}.neutre{background:#eceff3;color:var(--muted)}
+.alert b{font-size:14px}.alert p{margin:2px 0 0;color:var(--muted);font-size:13px}.src{font-size:11px;color:var(--faint);margin-top:3px}
+.expo{font-size:12px;font-weight:600;color:var(--navy);margin-top:4px}
+.link{color:var(--blue);cursor:pointer;text-decoration:underline;text-decoration-color:var(--blue2)}
+ul.tight{margin:0;padding-left:18px}ul.tight li{margin:5px 0}
+.bar{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+.track{background:#eef1f5;border-radius:4px;height:10px;position:relative}.fill{background:var(--blue);height:10px;border-radius:4px}
+.fill.neg{background:var(--red)}.fill.pos{background:var(--green)}
+.mark{position:absolute;top:-3px;width:2px;height:16px;background:var(--ink)}
+.legend{font-size:11px;color:var(--faint);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{background:var(--panel);border-radius:8px;padding:9px 11px}
+.tile p{margin:0;font-size:11px;color:var(--muted)}.tile b{font-size:16px}.tile span{font-size:11px;color:var(--faint);margin-left:4px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:11px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.04em}td.n,th.n{text-align:right;white-space:nowrap}
+tr.click{cursor:pointer}tr.click:hover{background:var(--panel)}tr.sel{background:#eaf1fa}tr.off td{color:var(--faint)}
+td.v{color:var(--green)}td.o{color:var(--amber);font-weight:600}td.r{color:var(--red);font-weight:600}
+.slider{display:grid;grid-template-columns:170px 1fr 70px;gap:10px;align-items:center;margin:9px 0;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--navy)}
+.no-ciq .ciq-only,.notes-only .ratios-only{display:none}
+.res{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.res div{background:var(--panel);border-radius:8px;padding:10px}.res p{margin:0;font-size:11px;color:var(--muted)}.res b{font-size:20px}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.btn{background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px 12px;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}.btn:hover{border-color:var(--blue2)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+select,input[type=search],input[type=text],input[type=number]{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;background:#fff;color:var(--ink)}
+input.w{width:76px;text-align:right;padding:5px 7px}
+.ask{display:flex;gap:8px}.ask input{flex:1}.ask button{background:var(--navy);color:#fff;border:0;border-radius:8px;padding:0 16px;font:inherit;font-weight:600;cursor:pointer}
+.note{background:var(--panel);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--muted);margin-top:10px}
+.privacy{display:flex;gap:8px;align-items:center;background:#eaf1fa;color:var(--navy);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.scroll{max-height:560px;overflow:auto}
+.fiche h2{margin:0;font-size:18px}.fiche .sub{color:var(--muted);font-size:13px;margin:2px 0 12px}
+.minis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.news a{color:var(--ink);text-decoration:none}.news a:hover{text-decoration:underline}.news li{margin:6px 0}
+.flist p{margin:6px 0;font-size:13px;color:var(--muted)}.sec2{font-size:11px;color:var(--amber)}
+details summary{cursor:pointer;color:var(--blue);font-size:12px}details label{display:block;font-size:12px;color:var(--muted);margin:3px 0}
+.totals{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;margin:6px 0 10px}.totals b{font-size:15px}
+.method p,.method li{color:var(--muted);font-size:13px}
+footer{padding:4px 28px 24px;font-size:11px;color:var(--faint);max-width:1360px}
+@media (max-width:1000px){.card{overflow-x:auto}.g2,.g2e,.g3{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.panel,nav,.top,footer{padding-left:16px;padding-right:16px}.slider{grid-template-columns:110px 1fr 60px}.res,.tiles,.minis{grid-template-columns:repeat(2,1fr)}}
+@media print{nav,.top button,.ask,.presets,.filters,.noprint{display:none!important}.panel{display:block!important;break-before:page;padding:12px 0}body{background:#fff}.card{break-inside:avoid}.scroll{max-height:none}}
+</style></head>
+<body>
+<header class="top"><div><b>CreditVigie</b> <span style="font-weight:400;opacity:.85">· Univers obligataire euro court terme</span><div class="meta" id="meta"></div></div>
+<button onclick="window.print()">Exporter en PDF</button></header>
+<nav id="nav">
+<button data-tab="synthese" class="on">Synthèse</button><button data-tab="portefeuille">Portefeuille</button>
+<button data-tab="scenarios">Scénarios</button><button data-tab="echeancier">Échéancier et hybrides</button>
+<button data-tab="fondamentaux">Fondamentaux</button><button data-tab="univers">Univers</button><button data-tab="methodo">Méthodologie</button>
+</nav>
+
+<section class="panel on" id="synthese">
+<div class="kpis" id="kpis"></div>
+<div class="grid g2">
+<div class="grid">
+<div class="card"><h3>À retenir cette semaine</h3><ul class="tight" id="retenir"></ul></div>
+<div class="card"><h3>Alertes de la semaine <small>exposition calculée sur votre portefeuille</small></h3><div id="alertes"></div></div>
+<div class="card ciq-only"><h3>Surveillance des notations <small>S&P, émetteurs de votre portefeuille</small></h3><div id="ratwatch"></div></div>
+</div>
+<div class="grid">
+<div class="card"><h3>Marchés <small id="mdate"></small></h3><div class="tiles" id="marche"></div></div>
+<div class="card"><h3>Votre portefeuille en bref</h3><div id="bref"></div></div>
+<div class="card noprint"><h3>Poser une question</h3>
+<div class="presets" id="chips"></div>
+<form class="ask" id="askf"><input type="text" id="askq" placeholder="Que change l'offre d'Intesa pour les porteurs de MPS ?"><button>Envoyer</button></form>
+<div class="note" id="askr" style="display:none"></div></div>
+</div></div>
+</section>
+
+<section class="panel" id="portefeuille">
+<div class="card">
+<div class="privacy">Vos positions restent dans votre navigateur : rien n'est envoyé ni enregistré ailleurs.</div>
+<h3>Composition <small>pondérations en % de l'actif ; le reste est en liquidités</small></h3>
+<div class="presets noprint" id="ppresets"></div>
+<div class="filters noprint"><select id="addsel"></select><button class="btn primary" type="button" id="addbtn">Ajouter</button>
+<label class="btn" style="cursor:pointer">Importer un CSV<input type="file" id="csvin" accept=".csv,.txt" hidden></label><button class="btn" type="button" id="csvout">Exporter en CSV</button></div>
+<div class="totals" id="totals"></div><div class="note" id="impmsg" style="display:none;margin:0 0 10px"></div>
+<div class="scroll" style="max-height:420px"><table id="ptable"></table></div>
+</div>
+<div class="grid g3 mt">
+<div class="card"><h3>Secteurs</h3><div id="secteurs"></div></div>
+<div class="card"><h3>Pays</h3><div id="pays"></div></div>
+<div class="card"><h3>Types d'obligations</h3><div id="types"></div><h3 class="mt" style="margin-bottom:8px">Maturité <small>jusqu'au call supposé</small></h3><div id="matu"></div></div>
+</div>
+<div class="grid g2e mt ciq-only">
+<div class="card"><h3>Notation S&P <small>note de l'émetteur, en % de l'actif</small></h3><div id="notes"></div></div>
+<div class="card"><h3>Perspectives S&P <small>en % de l'actif</small></h3><div id="outlooks"></div></div>
+</div>
+<div class="grid g2e mt">
+<div class="card"><h3>Concentration par émetteur <small>règle UCITS 5/10/40</small></h3><div id="conc"></div></div>
+<div class="card"><h3>Simulateur de fusion <small>exposition pro forma</small></h3>
+<div class="filters"><select id="f1"></select><select id="f2"></select></div><div id="fusion"></div></div>
+</div>
+</section>
+
+<section class="panel" id="scenarios">
+<div class="grid g2">
+<div class="card"><h3>Paramètres du scénario <small>choc instantané, puis portage sur l'horizon</small></h3>
+<div class="presets" id="presets"></div>
+<div class="slider"><span>Taux (courbe 1-5 ans)</span><input type="range" id="sr" min="-150" max="200" step="5"><b id="sro"></b></div>
+<div class="slider"><span>Spreads crédit</span><input type="range" id="ss" min="-50" max="200" step="10"><b id="sso"></b></div>
+<div class="slider"><span>Choc additionnel banques</span><input type="range" id="sb" min="0" max="300" step="10"><b id="sbo"></b></div>
+<div class="slider"><span>Choc additionnel hybrides</span><input type="range" id="sh" min="0" max="400" step="10"><b id="sho"></b></div>
+<div class="slider"><span>Horizon</span><input type="range" id="sz" min="3" max="12" step="3"><b id="szo"></b></div>
+<div class="slider"><span>Rendement moyen supposé</span><input type="range" id="sy" min="2" max="6" step="0.05"><b id="syo"></b></div>
+<div class="res"><div><p>Portage</p><b id="rc"></b></div><div><p>Effet taux</p><b id="rr"></b></div><div><p>Effet spreads</p><b id="rs"></b></div><div><p>Performance estimée</p><b id="rt"></b></div></div>
+<p class="legend" id="rinfo"></p></div>
+<div class="card"><h3>Contribution par secteur <small>effet spreads, en points de base</small></h3><div id="secimpact"></div></div>
+</div>
+<div class="card mt"><h3>Lignes les plus touchées <small>effet prix estimé du choc</small></h3><table id="topimpact"></table></div>
+<div class="card mt"><h3>Value at Risk <small>perte sur 1 jour, portefeuille actuel rejoué sur 3 ans d'historique de marché</small></h3>
+<div class="res" id="var"></div><div class="res" id="var2"></div><p class="legend" id="varinfo"></p></div>
+</section>
+
+<section class="panel" id="echeancier">
+<div class="grid g2e">
+<div class="card"><h3>Remboursements à venir <small>par trimestre, en % de l'actif</small></h3><div id="quarters"></div><p class="legend" id="reinv"></p></div>
+<div class="card"><h3>Prochaines échéances <small>12 mois</small></h3><div class="scroll" style="max-height:330px"><table id="next12"></table></div></div>
+</div>
+<div class="card mt"><h3>Hybrides et AT1 <small>dates anniversaires de call ou de reset</small></h3><table id="hyb"></table>
+<p class="legend">Date anniversaire déduite du libellé de la ligne, indicative : la date de call effective est à confirmer dans le prospectus. « n.d. » : libellé sans date exploitable. Prochaine étape : test économique du call (spread de reset contre coût de refinancement actuel).</p></div>
+</section>
+
+<section class="panel" id="fondamentaux">
+<div class="card"><h3>Points clés <small id="fper"></small></h3><ul class="tight" id="fpoints"></ul></div>
+<div class="card mt"><h3>Banques <small>solvabilité, liquidité, qualité des actifs</small></h3><table id="fbanks"></table>
+<p class="legend">Coussin CET1 = CET1 moins l'exigence SREP. Couleurs : coussin ≥ 300 pb, levier ≥ 4,5 %, LCR ≥ 130 %, NPL brut ≤ 3 % en vert ; seuils intermédiaires en orange. En gris : émetteurs absents de votre portefeuille.</p></div>
+<div class="card mt ciq-only ratios-only"><h3>Univers complet <small>S&P Capital IQ, notations et ratios</small></h3>
+<div class="filters noprint"><select id="ciqscope"><option value="p">Émetteurs de mon portefeuille</option><option value="u">Tout l'univers</option></select><select id="ciqtype"><option value="b">Banques</option><option value="c">Entreprises</option></select></div>
+<div class="scroll" style="max-height:520px"><table id="ciqtable"></table></div>
+<p class="legend" id="ciqleg"></p></div>
+<div class="card mt"><h3>Entreprises <small>levier, flux de trésorerie, liquidité</small></h3><table id="fcorps"></table>
+<p class="legend">Dette nette / EBITDA ≤ 3x en vert, 3 à 4,5x en orange, au-delà en rouge (seuils indicatifs, à adapter par secteur). Montants en millions.</p></div>
+</section>
+
+<section class="panel" id="univers">
+<div class="grid g2">
+<div class="card"><h3>Univers d'émetteurs <small id="ecount"></small></h3>
+<div class="filters"><input type="search" id="q" placeholder="Rechercher un émetteur"><select id="fs"></select><select id="fc"></select>
+<select id="fsig"><option value="">Tous les signaux</option><option value="alerte">Alerte</option><option value="suivre">À suivre</option><option value="ras">RAS</option></select>
+<select id="fheld"><option value="">Tout l'univers</option><option value="1">Dans mon portefeuille</option></select></div>
+<div class="scroll"><table id="etable"></table></div></div>
+<div class="card fiche" id="fiche"></div>
+</div>
+</section>
+
+<section class="panel method" id="methodo">
+<div class="grid g2e">
+<div class="card"><h3>Sources</h3><ul class="tight" id="sources"></ul></div>
+<div class="card"><h3>Hypothèses de calcul</h3><ul class="tight">
+<li>Sensibilité de chaque ligne : duration modifiée d'une obligation à coupon annuel, actualisée à 3,89 %.</li>
+<li>Obligations bancaires callable : appel supposé un an avant l'échéance ; format 10 ans supposé « 10NC5 » (Tier 2).</li>
+<li>Hybrides et perpétuelles : sensibilité de 1,03, observée sur des poches hybrides comparables.</li>
+<li>Poids d'un émetteur réparti à parts égales entre les lignes sélectionnées.</li>
+<li>Effets taux et spreads : somme ligne à ligne. Portage : rendement moyen supposé proratisé sur l'horizon, appliqué à la part investie. Convexité et effet de roulement non pris en compte.</li>
+<li>Value at Risk : chaque jour des 3 dernières années est rejoué sur le portefeuille actuel. Rendement d'une ligne = −sensibilité × (variation du taux AAA de la maturité la plus proche du call + variation de son spread). Le spread d'une ligne évolue proportionnellement à son niveau (méthode « Duration Times Spread ») : hypothèse de 60 pb pour l'investment grade et de 200 pb pour le high yield, les AT1 et les hybrides. VaR paramétrique : 2,326 × écart-type, hypothèse de rendements normaux.</li>
+<li>Fondamentaux : chiffres semestriels publiés par les émetteurs ; les ratios calculés (coussin CET1, trésorerie nette, flux libre) sont indiqués comme tels. Les sources secondaires sont signalées.</li>
+</ul></div>
+</div>
+<div class="card mt"><h3>Limites</h3><ul class="tight">
+<li>Les rendements de marché et les notations ligne par ligne ne sont pas publics : le portage repose sur un rendement moyen saisi par l'utilisateur.</li>
+<li>Les lignes ajoutées d'après les mouvements de septembre ont une date d'échéance approximative (année connue).</li>
+<li>VaR : l'écart de taux entre États de la zone euro (BTP-Bund, OAT-Bund) n'est pas modélisé, et tous les émetteurs d'une même catégorie suivent le même indice de spread. La VaR mesure les jours « normaux » : les scénarios de stress complètent l'analyse. <span id="backtest"></span></li>
+<li>Prototype construit sur données publiques. Ce n'est pas un conseil d'investissement.</li>
+</ul></div>
+</section>
+
+<footer id="foot"></footer>
+<script src="data.js"></script>
+<script>
+const D = window.DATA, E = D.emetteurs, FM = D.fondamentaux;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num = (v, d = 2) => Number(v).toLocaleString("fr-FR", {minimumFractionDigits: d, maximumFractionDigits: d});
+const pct = (v, d = 2) => num(v, d) + " %";
+const sgn = (v, d = 2) => (v >= 0 ? "+" : "−") + num(Math.abs(v), d) + " %";
+const fbp = v => { const r = Math.round(v); return r === 0 ? "0 pb" : (r > 0 ? "+" : "−") + Math.abs(r) + " pb"; };
+const fdate = iso => iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4) : "—";
+const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const SIG = {alerte: "Alerte", suivre: "À suivre", ras: "RAS"};
+const pill = s => `<span class="pill ${s}">${SIG[s]}</span>`;
+const byId = Object.fromEntries(E.map(e => [e.id, e]));
+const bars = (rows, max, opts = {}) => rows.length ? rows.map(([lab, v, mark]) =>
+  `<div class="bar"><span>${esc(lab)}</span><div class="track"><div class="fill ${opts.cls ? opts.cls(v) : ""}" style="width:${Math.min(100, Math.abs(v) / (max || 1) * 100)}%"></div>${mark != null ? `<div class="mark" style="left:${Math.min(100, mark / (max || 1) * 100)}%"></div>` : ""}</div><span style="text-align:right">${opts.fmt ? opts.fmt(v) : pct(v, 1)}</span></div>`).join("") : `<div class="note">Portefeuille vide.</div>`;
+const sumBy = (rows, key) => { const o = {}; rows.forEach(r => o[r[key]] = (o[r[key]] || 0) + r.w); return Object.entries(o).sort((a, b) => b[1] - a[1]); };
+
+/* ---------- portefeuille (état) ---------- */
+const today = new Date(D.genere_le);
+const KEY = "veille_portefeuille_v1";
+let P = {};
+const allLines = id => byId[id].lignes.map((_, i) => i);
+const senior = l => l.type !== "Hybride perpétuelle";
+function fromPreset(map, filter, strict) {
+  const out = {};
+  Object.entries(map).forEach(([id, w]) => { if (!byId[id]) return; const idx = allLines(id).filter(i => !filter || filter(byId[id].lignes[i]));
+    if (idx.length) out[id] = {w, l: idx}; else if (!strict) out[id] = {w, l: allLines(id)}; });
+  return out;
+}
+function equal(ids, total) { const o = {}; ids.forEach(id => o[id] = {w: Math.round(total / ids.length * 100) / 100, l: allLines(id)}); return o; }
+const PRESETS = {
+  "Exemple diversifié": () => fromPreset(D.presets.exemple, senior),
+  "Défensif (sans hybrides)": () => fromPreset(D.presets.defensif, senior, true),
+  "Banques européennes": () => equal(E.filter(e => e.secteur === "Banques" && !["États-Unis", "Canada"].includes(e.pays)).map(e => e.id), 98),
+  "Crédit équipondéré": () => equal(E.filter(e => e.lignes.some(l => l.credit)).map(e => e.id), 98),
+  "Vide": () => ({}),
+};
+function save() { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} }
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === "object") { P = Object.fromEntries(Object.entries(s).filter(([id, v]) => byId[id] && v && v.l && v.l.length)); return true; } } catch (e) {} return false; }
+/* positions ligne à ligne, dérivées de P */
+function positions() {
+  const out = [];
+  Object.entries(P).forEach(([id, p]) => { const e = byId[id]; const n = p.l.length; if (!n || !(p.w > 0)) return;
+    p.l.forEach(i => { const l = e.lignes[i]; if (l) out.push({...l, i, id, emetteur: e.nom, secteur: e.secteur, pays: e.pays, w: p.w / n}); }); });
+  return out;
+}
+const weightOf = id => P[id] ? (+P[id].w || 0) : 0;
+/* notations S&P (Capital IQ) */
+const SCALE = (D.ciq && D.ciq.echelle) || [];
+const HAS_CIQ = !!(D.ciq && D.ciq.source);  // false when built without any S&P data
+const RATINGS_ONLY = HAS_CIQ && D.ciq.notes_seulement;  // public version: S&P ratings, no Capital IQ ratios
+if (!HAS_CIQ) document.body.classList.add("no-ciq");
+if (RATINGS_ONLY) document.body.classList.add("notes-only");
+const sp = id => (byId[id] && byId[id].ciq) || null;
+const isNeg = c => c && /Négative|Surveillance négative/.test(c.perspective_sp || "");
+const recentAction = (c, days = 183) => c && c.derniere_action_sp && c.derniere_action_sp.date && (today - new Date(c.derniere_action_sp.date)) / 864e5 <= days;
+function avgRating(ids) {
+  const r = ids.filter(id => sp(id) && sp(id).rang_note != null && weightOf(id) > 0), w = r.reduce((t, id) => t + weightOf(id), 0);
+  if (!w) return {note: "n.d.", couv: 0, ig: 0};
+  const m = r.reduce((t, id) => t + weightOf(id) * sp(id).rang_note, 0) / w;
+  const ig = r.filter(id => sp(id).rang_note <= 9).reduce((t, id) => t + weightOf(id), 0);
+  return {note: SCALE[Math.round(m)], couv: w, ig: ig / w * 100};
+}
+
+/* ---------- navigation ---------- */
+function show(tab) {
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("on", p.id === tab));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  try { localStorage.setItem("tab", tab); } catch (e) {}
+}
+$("nav").onclick = e => e.target.dataset.tab && show(e.target.dataset.tab);
+function openIssuer(id) { show("univers"); renderFiche(id); }
+
+$("meta").textContent = `Semaine du ${fdate(D.semaine.semaine)} · univers de ${E.length} émetteurs · données publiques`;
+$("foot").textContent = "CreditVigie · construit par Farbod Pourali à partir de données publiques (rapports d'émetteurs, rapports de fonds, presse). Prototype : estimations simplifiées, pas un conseil d'investissement.";
+
+/* ---------- synthèse (statique) ---------- */
+$("retenir").innerHTML = D.semaine.a_retenir.map(t => `<li>${esc(t)}</li>`).join("");
+$("mdate").textContent = D.marche.libelle;
+$("marche").innerHTML = D.marche.indicateurs.map(m => `<div class="tile"><p>${esc(m.nom)}</p><b>${esc(m.valeur)}</b><span>${esc(m.variation)}</span></div>`).join("");
+const chips = ["Résumer la semaine pour mon portefeuille", "Quelles lignes souffrent le plus si les spreads bancaires s'écartent ?", "Quel est le risque de non-call sur l'AT1 Intesa ?"];
+$("chips").innerHTML = chips.map(c => `<button class="btn" type="button">${c}</button>`).join("");
+$("chips").onclick = e => { if (e.target.tagName === "BUTTON") $("askq").value = e.target.textContent; };
+$("askf").onsubmit = e => { e.preventDefault(); $("askr").style.display = "block";
+  $("askr").textContent = $("askq").value.trim() ? "Fonction en préparation : la question sera transmise à Claude (API Anthropic) avec les données de la semaine et votre portefeuille, et la réponse citera ses sources. Elle n'est pas active dans cette démonstration." : "Saisissez une question."; };
+
+/* ---------- rendu dépendant du portefeuille ---------- */
+function renderSynthese(pos) {
+  const inv = pos.reduce((t, p) => t + p.w, 0), cred = pos.filter(p => p.credit).reduce((t, p) => t + p.w, 0);
+  const dur = inv ? pos.reduce((t, p) => t + p.w * p.duration, 0) / 100 : 0;
+  const dated = pos.filter(p => p.annees_call != null), mat = dated.reduce((t, p) => t + p.w, 0);
+  const avgMat = mat ? dated.reduce((t, p) => t + p.w * p.annees_call, 0) / mat : 0;
+  const hyb = pos.filter(p => p.type === "Hybride perpétuelle").reduce((t, p) => t + p.w, 0);
+  const held = Object.keys(P).filter(id => weightOf(id) > 0);
+  const alertN = held.filter(id => byId[id].signal !== "ras").length;
+  $("kpis").innerHTML = [
+    ["Émetteurs", held.length, alertN + " en alerte ou à suivre"], ["Sensibilité estimée", num(dur), "taux, en %/100 pb"],
+    ["Maturité moyenne", num(avgMat) + " ans", "au call supposé"], HAS_CIQ ? ["Note moyenne S&P", avgRating(held.filter(id => byId[id].secteur !== "Souverains")).note, "crédit, émetteurs notés"] : ["Crédit", pct(cred, 1), "part de l'actif"],
+    ["Hybrides", pct(hyb, 1), "AT1 et perpétuelles"], ["Liquidités", pct(Math.max(0, 100 - inv), 1), "crédit " + pct(cred, 0) + " · souverains " + pct(inv - cred, 0)],
+  ].map(([a, b, c]) => `<div class="kpi"><p>${a}</p><div>${b}</div><em>${c}</em></div>`).join("");
+  $("alertes").innerHTML = D.semaine.alertes.map(a => {
+    const ids = a.emetteurs.length ? a.emetteurs : E.filter(e => e.pays === a.pays).map(e => e.id);
+    const w = ids.reduce((t, id) => t + weightOf(id), 0);
+    const expo = w > 0 ? `Votre exposition${a.pays ? " aux émetteurs (" + a.pays + ")" : ""} : ${pct(w)}${a.fusion ? (w > 5 ? " · au-dessus de 5 % si la fusion aboutit" : " · sous 5 % même après fusion") : ""}` : "Hors de votre portefeuille";
+    return `<div class="alert">${w > 0 ? pill(a.niveau) : '<span class="pill neutre">Info</span>'}<div><b>${esc(a.titre)}</b><p>${esc(a.texte)}</p>
+    <div class="expo">${expo}</div><div class="src">${esc(a.sources)}${a.emetteurs.length ? " · " + a.emetteurs.map(id => `<span class="link" onclick="openIssuer('${id}')">fiche ${esc(byId[id] ? byId[id].nom : id)}</span>`).join(" · ") : ""}</div></div></div>`; }).join("")
+    + `<div class="alert">${pill("ras")}<div><b>${Math.max(0, held.length - alertN)} émetteurs de votre portefeuille sans événement crédit notable</b><p>Aucune notation, offre ou émission qui modifie le profil de crédit cette semaine.</p></div></div>`;
+  const sec = sumBy(pos, "secteur");
+  $("bref").innerHTML = bars(sec.slice(0, 6), Math.max(...sec.map(r => r[1]), 1) * 1.05) +
+    `<p class="legend"><span class="link" onclick="show('portefeuille')">Modifier le portefeuille</span></p>`;
+}
+
+function renderRatingWatch() {
+  const held = Object.keys(P).filter(id => weightOf(id) > 0 && sp(id));
+  const rows = held.filter(id => isNeg(sp(id)) || recentAction(sp(id)) || /Surveillance/.test(sp(id).perspective_sp || ""))
+    .sort((a, b) => (isNeg(sp(b)) - isNeg(sp(a))) || weightOf(b) - weightOf(a));
+  const hy = held.filter(id => sp(id).rang_note != null && sp(id).rang_note > 9).reduce((t, id) => t + weightOf(id), 0);
+  $("ratwatch").innerHTML = (rows.length ? `<table><tr><th>Émetteur</th><th>Note</th><th>Perspective</th><th>Dernière action</th><th class="n">Votre poids</th></tr>` +
+    rows.map(id => { const c = sp(id), a = c.derniere_action_sp;
+      return `<tr class="click" onclick="openIssuer('${id}')"><td>${esc(byId[id].nom)}</td><td>${esc(c.note_sp || c.note_sp_brute || "n.d.")}</td><td class="${isNeg(c) ? "r" : /Positive/.test(c.perspective_sp || "") ? "v" : ""}">${esc(c.perspective_sp || "n.d.")}</td><td>${a ? esc(a.types.join(", ")) + " · " + fdate(a.date) : "—"}</td><td class="n">${pct(weightOf(id))}</td></tr>`; }).join("") + `</table>`
+    : `<div class="note" style="margin:0">Aucune perspective négative ni action de notation récente sur vos émetteurs.</div>`) +
+    `<p class="legend">Perspectives négatives, surveillances et actions des 6 derniers mois. Part high yield (BB+ et moins) : ${pct(hy)} de l'actif. Source : ${RATINGS_ONLY ? "S&P Global Ratings" : "S&P Capital IQ"}.</p>`;
+}
+
+/* --- onglet portefeuille --- */
+const addable = [...E].sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+function renderAddSel() { $("addsel").innerHTML = addable.filter(e => !P[e.id]).map(e => `<option value="${e.id}">${esc(e.nom)} · ${esc(e.secteur)}</option>`).join(""); }
+$("ppresets").innerHTML = Object.keys(PRESETS).map(p => `<button class="btn" type="button">${p}</button>`).join("");
+$("ppresets").onclick = e => { const f = PRESETS[e.target.textContent]; if (!f) return; P = f(); save(); renderAll(); };
+$("addbtn").onclick = () => { const id = $("addsel").value; if (!id) return; P[id] = {w: 2, l: allLines(id)}; save(); renderAll(); };
+function totalsHtml() {
+  const inv = Object.keys(P).reduce((t, id) => t + weightOf(id), 0);
+  return `<span>Investi <b>${pct(inv, 1)}</b></span><span>Liquidités <b class="${inv > 100 ? "neg" : ""}">${pct(100 - inv, 1)}</b></span><span>Émetteurs <b>${Object.keys(P).length}</b></span>` +
+    (inv > 100 ? `<span class="neg">Le total dépasse 100 % : réduisez certaines pondérations.</span>` : "");
+}
+function renderPTable() {
+  const ids = Object.keys(P).sort((a, b) => weightOf(b) - weightOf(a));
+  $("totals").innerHTML = totalsHtml();
+  $("ptable").innerHTML = `<tr><th>Émetteur</th><th>Secteur</th><th>Pays</th><th>Lignes</th><th class="n">Poids (%)</th><th></th></tr>` + (ids.length ? ids.map(id => { const e = byId[id];
+    return `<tr><td><span class="link" onclick="openIssuer('${id}')">${esc(e.nom)}</span> ${e.signal !== "ras" ? pill(e.signal) : ""}</td><td>${esc(e.secteur)}</td><td>${esc(e.pays)}</td>
+    <td><details><summary>${P[id].l.length} / ${e.lignes.length}</summary>${e.lignes.map((l, i) => `<label><input type="checkbox" data-id="${id}" data-i="${i}" ${P[id].l.includes(i) ? "checked" : ""}> ${esc(l.libelle)}</label>`).join("")}</details></td>
+    <td class="n"><input class="w" type="number" min="0" max="100" step="0.25" value="${weightOf(id)}" data-w="${id}"></td><td><button class="btn" type="button" data-rm="${id}">Retirer</button></td></tr>`; }).join("")
+    : `<tr><td colspan="6"><div class="note" style="margin:0">Portefeuille vide : choisissez un portefeuille type ou ajoutez des émetteurs.</div></td></tr>`);
+}
+$("ptable").addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.w) { const v = parseFloat(t.value); P[t.dataset.w].w = isFinite(v) && v >= 0 ? v : 0; }
+  if (t.dataset.i != null && t.dataset.id) { const p = P[t.dataset.id], i = +t.dataset.i;
+    p.l = t.checked ? [...new Set([...p.l, i])].sort((a, b) => a - b) : p.l.filter(x => x !== i);
+    if (!p.l.length) { p.l = [i]; t.checked = true; } }
+  save(); renderAll(true);
+});
+$("ptable").addEventListener("click", e => { const id = e.target.dataset.rm; if (id) { delete P[id]; save(); renderAll(); } });
+function renderExposures(pos) {
+  const sec = sumBy(pos, "secteur"), pay = sumBy(pos, "pays"), typ = sumBy(pos, "type");
+  $("secteurs").innerHTML = bars(sec.slice(0, 10), Math.max(...sec.map(r => r[1]), 1) * 1.05);
+  $("pays").innerHTML = bars(pay.slice(0, 10), Math.max(...pay.map(r => r[1]), 1) * 1.05);
+  $("types").innerHTML = bars(typ, Math.max(...typ.map(r => r[1]), 1) * 1.05);
+  const B = [["0-1 an", 0, 1], ["1-2 ans", 1, 2], ["2-3 ans", 2, 3], ["3-4 ans", 3, 4], ["4-5 ans", 4, 5], ["> 5 ans", 5, 99]];
+  const toCall = p => p.annees_call;
+  const mb = B.map(([lab, a, b]) => [lab, pos.filter(p => toCall(p) != null && toCall(p) >= a && toCall(p) < b).reduce((t, p) => t + p.w, 0)]);
+  $("matu").innerHTML = bars(mb, Math.max(...mb.map(r => r[1]), 1) * 1.05);
+  const buckets = ["AAA", "AA", "A", "BBB", "BB", "B", "CCC et moins"], bOf = r => r <= 0 ? 0 : r <= 3 ? 1 : r <= 6 ? 2 : r <= 9 ? 3 : r <= 12 ? 4 : r <= 15 ? 5 : 6;
+  const nb = Object.fromEntries(buckets.map(b => [b, 0])); let nr = 0;
+  Object.keys(P).forEach(id => { const w = weightOf(id); if (!w) return; const c = sp(id);
+    if (byId[id].secteur === "Souverains") return; if (c && c.rang_note != null) nb[buckets[bOf(c.rang_note)]] += w; else nr += w; });
+  const nrows = [...buckets.filter(b => nb[b] > 0).map(b => [b, nb[b]]), ["Non noté S&P", nr]];
+  const ar = avgRating(Object.keys(P).filter(id => byId[id].secteur !== "Souverains"));
+  $("notes").innerHTML = bars(nrows, Math.max(...nrows.map(r => r[1]), 1) * 1.05) +
+    `<p class="legend">Hors souverains. Note moyenne pondérée : <b>${ar.note}</b> · investment grade : ${ar.couv ? pct(ar.ig, 0) : "n.d."} des émetteurs notés.</p>`;
+  const ol = {}; Object.keys(P).forEach(id => { const w = weightOf(id), c = sp(id); if (!w || byId[id].secteur === "Souverains") return; const k = (c && c.perspective_sp) || "Non noté S&P"; ol[k] = (ol[k] || 0) + w; });
+  const orows = Object.entries(ol).sort((a, b) => b[1] - a[1]);
+  $("outlooks").innerHTML = bars(orows, Math.max(...orows.map(r => r[1]), 1) * 1.05, {cls: v => ""}) + `<p class="legend">Une perspective négative signale un risque d'abaissement de la note dans les 6 à 24 mois.</p>`;
+  const priv = Object.keys(P).filter(id => byId[id].secteur !== "Souverains" && weightOf(id) > 0).sort((a, b) => weightOf(b) - weightOf(a));
+  const over5 = priv.filter(id => weightOf(id) > 5), s5 = over5.reduce((t, id) => t + weightOf(id), 0), over10 = priv.filter(id => weightOf(id) > 10);
+  $("conc").innerHTML = bars(priv.slice(0, 8).map(id => [byId[id].nom, weightOf(id), 5]), Math.max(6, ...priv.map(weightOf)) * 1.05) +
+    `<p class="legend">Trait noir : seuil de 5 %. Émetteurs privés au-dessus de 5 % : ${over5.length} (somme ${pct(s5)}, limite 40 %)${over10.length ? ` · <span class="neg">${over10.length} au-dessus de la limite de 10 %</span>` : ""}.</p>`;
+  const opts = addable.filter(e => e.secteur !== "Souverains").map(e => `<option value="${e.id}">${esc(e.nom)}</option>`).join("");
+  const v1 = $("f1").value || "INTESA SANPAOLO", v2 = $("f2").value || "MONTE DEI PASCHI";
+  $("f1").innerHTML = opts; $("f2").innerHTML = opts; $("f1").value = v1; $("f2").value = v2; fusion();
+}
+function fusion() {
+  const a = byId[$("f1").value], b = byId[$("f2").value];
+  if (!a || !b) return;
+  if (a.id === b.id) { $("fusion").innerHTML = `<div class="note">Choisissez deux émetteurs différents.</div>`; return; }
+  const w = weightOf(a.id) + weightOf(b.id);
+  const priv = Object.keys(P).filter(id => byId[id].secteur !== "Souverains" && id !== a.id && id !== b.id);
+  const rank = priv.filter(id => weightOf(id) > w).length + 1, over = w > 5;
+  $("fusion").innerHTML = `<div class="res" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+    <div><p>Exposition combinée</p><b class="${over ? "neg" : ""}">${pct(w)}</b></div><div><p>Rang parmi vos émetteurs privés</p><b>${w > 0 ? rank + `<sup>${rank === 1 ? "er" : "e"}</sup>` : "—"}</b></div>
+    <div><p>Seuil de 5 %</p><b class="${over ? "neg" : "pos"}">${over ? "Au-dessus" : "En dessous"}</b></div></div>
+    <p class="legend">${esc(a.nom)} ${pct(weightOf(a.id))} + ${esc(b.nom)} ${pct(weightOf(b.id))}. ${over ? "Au-delà de 5 %, la position entre dans la limite globale de 40 % de la règle 5/10/40 ; la limite par émetteur reste de 10 %." : "La position combinée reste sous le seuil de 5 %."}</p>`;
+}
+$("f1").onchange = fusion; $("f2").onchange = fusion;
+/* import / export CSV */
+$("csvout").onclick = () => {
+  const rows = [["emetteur", "poids"], ...Object.keys(P).map(id => [byId[id].nom, String(weightOf(id)).replace(".", ",")])];
+  const blob = new Blob(["﻿" + rows.map(r => r.join(";")).join("\n")], {type: "text/csv"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "portefeuille.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("csvin").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const text = await f.text(); const next = {}, miss = [];
+  text.split(/\r?\n/).forEach(row => { const parts = row.split(/[;\t]|,(?=\s*\d)/).map(s => s.trim()); if (parts.length < 2) return;
+    const w = parseFloat(parts[1].replace(",", ".")); if (!isFinite(w)) return; const q = norm(parts[0]);
+    const hit = E.find(x => norm(x.nom) === q || norm(x.id) === q) || E.find(x => norm(x.nom).includes(q) || q.includes(norm(x.nom)));
+    if (hit) next[hit.id] = {w: (next[hit.id] ? next[hit.id].w : 0) + w, l: allLines(hit.id)}; else miss.push(parts[0]); });
+  $("impmsg").style.display = "block";
+  if (!Object.keys(next).length) { $("impmsg").textContent = "Aucun émetteur reconnu. Format attendu : une ligne par émetteur, « nom;poids »."; e.target.value = ""; return; }
+  P = next; save(); renderAll();
+  $("impmsg").style.display = "block";
+  $("impmsg").textContent = `${Object.keys(next).length} émetteurs importés.` + (miss.length ? ` Non reconnus : ${miss.slice(0, 8).join(", ")}${miss.length > 8 ? "…" : ""}.` : "");
+  e.target.value = "";
+};
+
+/* --- scénarios --- */
+const SCN = {"Statu quo": [0, 0, 0, 0, 12], "Hausse BCE (+75 pb)": [75, 10, 0, 0, 12], "Crise bancaire": [-25, 40, 120, 200, 12],
+  "Baisse des taux (−100 pb)": [-100, -10, 0, 0, 12], "Stagflation": [100, 100, 50, 100, 12]};
+$("presets").innerHTML = Object.keys(SCN).map(p => `<button class="btn" type="button">${p}</button>`).join("");
+$("presets").onclick = e => { const p = SCN[e.target.textContent]; if (!p) return; ["sr", "ss", "sb", "sh", "sz"].forEach((id, i) => $(id).value = p[i]); scen(); };
+const shock = (l, s, b, h) => l.credit ? s + (l.banque ? b : 0) + (l.type === "Hybride perpétuelle" ? h : 0) : 0;
+function scen() {
+  const pos = positions();
+  const r = +$("sr").value, s = +$("ss").value, b = +$("sb").value, h = +$("sh").value, z = +$("sz").value, y = +$("sy").value;
+  const bp = v => (v >= 0 ? "+" : "") + v + " pb";
+  $("sro").textContent = bp(r); $("sso").textContent = bp(s); $("sbo").textContent = bp(b); $("sho").textContent = bp(h); $("szo").textContent = z + " mois"; $("syo").textContent = pct(y);
+  const inv = pos.reduce((t, p) => t + p.w, 0), dur = pos.reduce((t, p) => t + p.w * p.duration, 0) / 100;
+  const carry = y * inv / 100 * z / 12, re = -dur * r / 100;
+  let se = 0; const bySec = {};
+  pos.forEach(l => { const c = -l.w / 100 * l.duration * shock(l, s, b, h) / 100; se += c; bySec[l.secteur] = (bySec[l.secteur] || 0) + c; });
+  const set = (id, v) => { $(id).textContent = sgn(v); $(id).className = v >= 0 ? "pos" : "neg"; };
+  set("rc", carry); set("rr", re); set("rs", se); set("rt", carry + re + se);
+  const avgShock = inv ? pos.reduce((t, l) => t + l.w * shock(l, s, b, h), 0) / inv : 0;
+  $("rinfo").textContent = inv ? `Sensibilité estimée du portefeuille : ${num(dur)} · rendement estimé après le choc : ${pct(y + r / 100 + avgShock / 100)} · point mort sur ${z} mois : une hausse des taux d'environ ${dur ? Math.round(carry / dur * 100) : "—"} pb, à spreads inchangés.` : "Portefeuille vide.";
+  const secRows = Object.entries(bySec).filter(([, v]) => Math.abs(v) > 0.00005).sort((a, c) => a[1] - c[1]).slice(0, 9);
+  $("secimpact").innerHTML = secRows.length ? bars(secRows.map(([k, v]) => [k, v * 100]), Math.max(...secRows.map(([, v]) => Math.abs(v * 100))) || 1,
+    {fmt: fbp, cls: v => v < 0 ? "neg" : "pos"}) : `<div class="note">Aucun choc de spread dans ce scénario.</div>`;
+  const impact = pos.map(l => ({...l, px: -l.duration * (r + shock(l, s, b, h)) / 100})).map(l => ({...l, contrib: l.px * l.w})).sort((a, c) => a.contrib - c.contrib).slice(0, 10);
+  $("topimpact").innerHTML = `<tr><th>Émetteur</th><th>Ligne</th><th>Type</th><th class="n">Poids</th><th class="n">Sensibilité</th><th class="n">Effet prix</th><th class="n">Contribution</th></tr>` +
+    impact.map(l => `<tr class="click" onclick="openIssuer('${l.id}')"><td>${esc(l.emetteur)}</td><td>${esc(l.libelle)}</td><td>${l.type}</td><td class="n">${pct(l.w)}</td><td class="n">${num(l.duration)}</td><td class="n ${l.px < 0 ? "neg" : "pos"}">${sgn(l.px)}</td><td class="n">${fbp(l.contrib)}</td></tr>`).join("");
+}
+["sr", "ss", "sb", "sh", "sz", "sy"].forEach(id => $(id).oninput = scen);
+SCN["Hausse BCE (+75 pb)"].forEach((v, i) => $(["sr", "ss", "sb", "sh", "sz"][i]).value = v); $("sy").value = 3.7;
+
+/* --- value at risk (facteurs calculés par var_portefeuille.py) --- */
+function varSeries(pos, rates = true, spreads = true) {
+  const V = D.var, r = new Float64Array(V.dates.length);
+  pos.forEach(l => { const [t, s] = V.expositions[l.id][l.i], k = l.w / 100 * -l.duration / 100;
+    for (let d = 0; d < r.length; d++) r[d] += k * ((rates ? V.taux_pb[t][d] : 0) + (spreads ? s * V.hy_rel[d] : 0)); });
+  return r;
+}
+function quantile(a, p) { const s = Array.from(a).sort((x, y) => x - y), x = (s.length - 1) * p, lo = Math.floor(x);
+  return s[lo] + (s[Math.ceil(x)] - s[lo]) * (x - lo); }
+function renderVar(pos) {
+  if (!D.var) { $("var").innerHTML = `<div class="note">Lancer var_portefeuille.py pour calculer la VaR.</div>`; return; }
+  if (!pos.length) { $("var").innerHTML = $("var2").innerHTML = ""; $("varinfo").textContent = "Portefeuille vide."; return; }
+  const r = varSeries(pos), n = r.length, q95 = quantile(r, .05), q99 = quantile(r, .01);
+  const tail = Array.from(r).filter(x => x <= q99), es = -tail.reduce((t, x) => t + x, 0) / tail.length;
+  const mean = r.reduce((t, x) => t + x, 0) / n, sd = Math.sqrt(r.reduce((t, x) => t + (x - mean) ** 2, 0) / (n - 1));
+  let worst = 0; r.forEach((x, d) => { if (x < r[worst]) worst = d; });
+  const vr = -quantile(varSeries(pos, true, false), .01), vs = -quantile(varSeries(pos, false, true), .01);
+  const tile = (t, v) => `<div><p>${t}</p><b>${v}</b></div>`;
+  $("var").innerHTML = tile("VaR historique 95 %", pct(-q95, 3)) + tile("VaR historique 99 %", pct(-q99, 3)) + tile("Expected shortfall 99 %", pct(es, 3)) + tile("VaR paramétrique 99 %", pct(2.326 * sd, 3));
+  $("var2").innerHTML = tile("Volatilité ex-ante annualisée", pct(sd * Math.sqrt(252), 2)) + tile("VaR 99 % à 10 jours", pct(-q99 * Math.sqrt(10), 3)) + tile("VaR 99 % taux seuls / spreads seuls", pct(vr, 3) + " / " + pct(vs, 3)) + tile(`Pire jour (${fdate(D.var.dates[worst])})`, sgn(r[worst], 3));
+  if (D.var.backtest_exemple) { const bt = D.var.backtest_exemple; $("backtest").textContent = `Backtest sur le portefeuille « Exemple diversifié » (VaR 99 % calculée sur les 250 jours précédents) : ${bt.depassements} dépassements sur ${bt.jours} jours, pour environ ${Math.round(bt.jours / 100)} attendus. La VaR historique réagit lentement aux changements de volatilité.`; }
+  $("varinfo").textContent = `En % de la valeur du portefeuille. ${n} jours de marché du ${fdate(D.var.debut)} au ${fdate(D.var.fin)}. ` +
+    `Une VaR 99 % de ${pct(-q99, 3)} signifie qu'un jour sur cent, la perte a dépassé ce niveau. ` +
+    `Taux et spreads ont tendance à se compenser (en période de stress, les taux baissent quand les spreads montent), d'où une VaR totale ${-q99 < vr ? "inférieure" : "supérieure"} à celle des taux seuls. ` +
+    `Volatilité ex-ante : écart-type des rendements journaliers du portefeuille actuel × √252. VaR à 10 jours par la règle de la racine du temps. Sources : ${D.var.source}.`;
+}
+
+/* --- échéancier --- */
+const qOf = d => d.getFullYear() + "-T" + (Math.floor(d.getMonth() / 3) + 1);
+function renderEcheancier(pos) {
+  const qs = []; for (let i = 0; i < 8; i++) qs.push(qOf(new Date(today.getFullYear(), today.getMonth() + 3 * i, 1)));
+  const qsum = Object.fromEntries(qs.map(q => [q, 0]));
+  const dated = pos.filter(l => l.echeance);
+  dated.forEach(l => { const q = qOf(new Date(l.echeance)); if (q in qsum) qsum[q] += l.w; });
+  $("quarters").innerHTML = bars(qs.map(q => [q.replace("-T", " · T"), qsum[q]]), Math.max(...Object.values(qsum), 1) * 1.1);
+  const in12 = dated.filter(l => l.annees <= 1).sort((a, b) => a.annees - b.annees);
+  $("reinv").textContent = `${in12.length} lignes arrivent à échéance dans les 12 mois (${pct(in12.reduce((t, l) => t + l.w, 0))} de l'actif) : liquidités à réinvestir.`;
+  $("next12").innerHTML = `<tr><th>Échéance</th><th>Émetteur</th><th>Ligne</th><th class="n">Poids</th></tr>` + (in12.length ?
+    in12.map(l => `<tr class="click" onclick="openIssuer('${l.id}')"><td>${fdate(l.echeance)}${l.approx ? "*" : ""}</td><td>${esc(l.emetteur)}</td><td>${esc(l.libelle)}</td><td class="n">${pct(l.w)}</td></tr>`).join("")
+    : `<tr><td colspan="4">Aucune échéance dans les 12 mois.</td></tr>`);
+  const hy = pos.filter(l => l.type === "Hybride perpétuelle").sort((a, b) => (a.anniversaire_call || "9999").localeCompare(b.anniversaire_call || "9999"));
+  $("hyb").innerHTML = `<tr><th>Date anniversaire indicative</th><th>Émetteur</th><th>Ligne</th><th>Secteur</th><th class="n">Émise en</th><th class="n">Poids</th></tr>` + (hy.length ?
+    hy.map(l => { const m = l.anniversaire_call ? Math.round((new Date(l.anniversaire_call) - today) / 2.63e9) : null;
+      return `<tr class="click" onclick="openIssuer('${l.id}')"><td>${l.anniversaire_call ? `${fdate(l.anniversaire_call)} <span class="pill neutre">${m} mois</span>` : "n.d. (date non publiée)"}</td><td>${esc(l.emetteur)}</td><td>${esc(l.libelle)}</td><td>${esc(l.secteur)}</td><td class="n">${l.annee_emission || "—"}</td><td class="n">${pct(l.w)}</td></tr>`; }).join("") +
+    `<tr><td colspan="5"><b>Total hybrides</b></td><td class="n"><b>${pct(hy.reduce((t, l) => t + l.w, 0))}</b></td></tr>` : `<tr><td colspan="6">Aucune obligation hybride dans le portefeuille.</td></tr>`);
+}
+
+/* --- fondamentaux --- */
+const fp = (v, d = 1) => v == null ? "n.d." : pct(v, d);
+const fm = v => v == null ? "n.d." : num(v, 0);
+const cls = (v, good, mid, hi = true) => v == null ? "" : hi ? (v >= good ? "v" : v >= mid ? "o" : "r") : (v <= good ? "v" : v <= mid ? "o" : "r");
+const buffer = f => f.exigence_cet1 != null ? Math.round((f.cet1 - f.exigence_cet1) * 100) : (f.coussin_publie ?? null);
+$("fper").textContent = FM.periode + " · relevé le " + fdate(FM.collecte);
+$("fpoints").innerHTML = FM.points_cles.map(t => `<li>${esc(t)}</li>`).join("");
+function renderFond() {
+  const order = list => list.sort((a, b) => weightOf(b.id) - weightOf(a.id) || a.nom.localeCompare(b.nom));
+  const banks = order(E.filter(e => e.fondamentaux && e.fondamentaux.type === "banques"));
+  const corps = order(E.filter(e => e.fondamentaux && e.fondamentaux.type === "entreprises"));
+  $("fbanks").innerHTML = `<tr><th>Émetteur</th><th class="n">Votre poids</th><th class="n">CET1</th><th class="n">Exigence</th><th class="n">Coussin</th><th class="n">Levier</th><th class="n">LCR</th><th class="n">NPL brut</th><th class="n">Couverture</th><th class="n">Coût du risque</th><th class="n">RoTE</th><th>Signal</th></tr>` +
+    banks.map(e => { const f = e.fondamentaux, b = buffer(f), w = weightOf(e.id);
+      return `<tr class="click ${w ? "" : "off"}" onclick="openIssuer('${e.id}')"><td>${esc(e.nom)}</td><td class="n">${w ? pct(w) : "—"}</td><td class="n">${fp(f.cet1)}</td><td class="n">${fp(f.exigence_cet1, 2)}</td>
+      <td class="n ${cls(b, 300, 200)}">${b == null ? "n.d." : b + " pb" + (f.exigence_cet1 == null ? " (publié)" : "")}</td><td class="n ${cls(f.levier, 4.5, 3.5)}">${fp(f.levier)}</td><td class="n ${cls(f.lcr, 130, 110)}">${f.lcr == null ? "n.d." : f.lcr + " %"}</td>
+      <td class="n ${cls(f.npl_brut, 3, 5, false)}">${fp(f.npl_brut)}</td><td class="n">${f.couverture == null ? "n.d." : num(f.couverture, 1) + " %"}</td><td class="n">${f.cout_risque == null ? "n.d." : f.cout_risque + " pb"}</td><td class="n">${fp(f.rote)}</td><td>${pill(e.signal)}</td></tr>`; }).join("");
+  $("fcorps").innerHTML = `<tr><th>Émetteur</th><th class="n">Votre poids</th><th class="n">EBITDA S1</th><th class="n">Dette nette</th><th class="n">DN / EBITDA</th><th>Flux de trésorerie</th><th class="n">Liquidité</th><th>Signal</th></tr>` +
+    corps.map(e => { const f = e.fondamentaux, cur = f.devise, w = weightOf(e.id), cash = f.dette_nette != null && f.dette_nette < 0;
+      return `<tr class="click ${w ? "" : "off"}" onclick="openIssuer('${e.id}')"><td>${esc(e.nom)}${f.secondaire ? ' <span class="sec2">source secondaire</span>' : ""}</td><td class="n">${w ? pct(w) : "—"}</td><td class="n">${fm(f.ebitda_s1)} ${cur}</td>
+      <td class="n">${f.dette_nette == null ? "n.d." : cash ? "trésorerie nette " + fm(-f.dette_nette) + " " + cur : fm(f.dette_nette) + " " + cur}</td>
+      <td class="n ${cash ? "v" : cls(f.dn_ebitda, 3, 4.5, false)}">${cash ? "< 0" : f.dn_ebitda == null ? "n.d." : num(f.dn_ebitda, 1) + "x"}</td>
+      <td style="max-width:320px">${esc(f.cash_flow || "n.d.")}</td><td class="n">${f.liquidite == null ? "n.d." : fm(f.liquidite) + " " + cur}</td><td>${pill(e.signal)}</td></tr>`; }).join("");
+}
+function renderCiqTable() {
+  const scope = $("ciqscope").value, type = $("ciqtype").value;
+  let rows = E.filter(e => e.ciq && e.secteur !== "Souverains" && (scope === "u" || weightOf(e.id) > 0) && (type === "b" ? e.ciq.cet1 != null : e.ciq.cet1 == null));
+  rows.sort((a, b) => weightOf(b.id) - weightOf(a.id) || (a.ciq.rang_note ?? 99) - (b.ciq.rang_note ?? 99));
+  const head = `<th>Émetteur</th><th class="n">Poids</th><th>Note</th><th>Persp.</th>`;
+  $("ciqtable").innerHTML = type === "b"
+    ? `<tr>${head}<th class="n">CET1</th><th class="n">Global</th><th class="n">Levier</th><th class="n">LCR</th><th class="n">NPL*</th><th class="n">Couv.*</th><th class="n">ROE</th><th class="n">Prêts/dép.</th></tr>` +
+      rows.map(e => { const c = e.ciq; return `<tr class="click" onclick="openIssuer('${e.id}')"><td>${esc(e.nom)}</td><td class="n">${weightOf(e.id) ? pct(weightOf(e.id)) : "—"}</td><td>${esc(c.note_sp || "—")}</td><td class="${isNeg(c) ? "r" : ""}">${esc(c.perspective_sp || "—")}</td>
+      <td class="n ${cls(c.cet1, 12, 10.5)}">${fp(c.cet1)}</td><td class="n">${fp(c.ratio_global)}</td><td class="n ${cls(c.levier_bale3, 4.5, 3.5)}">${fp(c.levier_bale3)}</td><td class="n ${cls(c.lcr, 130, 110)}">${c.lcr == null ? "n.d." : num(c.lcr, 0) + " %"}</td>
+      <td class="n ${cls(c.npl, 3, 5, false)}">${fp(c.npl)}</td><td class="n">${c.couverture == null ? "n.d." : num(c.couverture, 0) + " %"}</td><td class="n">${fp(c.roe)}</td><td class="n">${c.prets_depots == null ? "n.d." : num(c.prets_depots, 0) + " %"}</td></tr>`; }).join("")
+    : `<tr>${head}<th class="n">DN / EBITDA</th><th class="n">Dette / EBITDA</th><th class="n">EBITDA / intérêts</th><th>Secteur (S&P)</th></tr>` +
+      rows.map(e => { const c = e.ciq, cash = c.dette_nette_musd != null && c.dette_nette_musd < 0; return `<tr class="click" onclick="openIssuer('${e.id}')"><td>${esc(e.nom)}</td><td class="n">${weightOf(e.id) ? pct(weightOf(e.id)) : "—"}</td><td>${esc(c.note_sp || "—")}</td><td class="${isNeg(c) ? "r" : ""}">${esc(c.perspective_sp || "—")}</td>
+      <td class="n ${cash ? "v" : cls(c.dn_ebitda, 3, 4.5, false)}">${cash ? "< 0" : c.dn_ebitda == null ? "n.d." : num(c.dn_ebitda, 1) + "x"}</td><td class="n">${c.dette_ebitda == null ? "n.d." : num(c.dette_ebitda, 1) + "x"}</td>
+      <td class="n ${cls(c.ebitda_interets, 6, 3)}">${c.ebitda_interets == null ? "n.d." : num(c.ebitda_interets, 1) + "x"}</td><td>${esc(c.secteur_sp || "")}</td></tr>`; }).join("");
+  if (!rows.length) $("ciqtable").innerHTML = `<tr><td><div class="note" style="margin:0">Aucun émetteur de ce type dans la sélection.</div></td></tr>`;
+  $("ciqleg").textContent = `${rows.length} émetteurs. ${D.ciq.source}. ` + (type === "b"
+    ? "Ratios bancaires tels que publiés (dernier trimestre) ; * NPL et couverture selon les définitions S&P, différentes des ratios publiés par les banques. Couleurs : CET1 ≥ 12 %, levier ≥ 4,5 %, LCR ≥ 130 %, NPL ≤ 3 % en vert."
+    : "Douze derniers mois ; dette selon S&P (loyers et certains hybrides inclus), d'où des écarts avec la dette nette publiée par les émetteurs. Couleurs : DN/EBITDA ≤ 3x, EBITDA/intérêts ≥ 6x en vert.");
+}
+["ciqscope", "ciqtype"].forEach(id => $(id).onchange = renderCiqTable);
+
+function ficheFond(e) {
+  const f = e.fondamentaux; if (!f && e.ciq) return ""; if (!f) return `<h3 style="margin-top:14px">Fondamentaux</h3><div class="note" style="margin:0">Fondamentaux non encore collectés pour cet émetteur.</div>`;
+  const tiles = f.type === "banques"
+    ? [["CET1", fp(f.cet1)], ["Coussin vs SREP", buffer(f) == null ? "n.d." : buffer(f) + " pb"], ["Levier", fp(f.levier)], ["LCR", f.lcr == null ? "n.d." : f.lcr + " %"], ["NPL brut", fp(f.npl_brut)], ["Couverture", f.couverture == null ? "n.d." : num(f.couverture, 1) + " %"], ["Coût du risque", f.cout_risque == null ? "n.d." : f.cout_risque + " pb"], ["RoTE", fp(f.rote)]]
+    : [[f.ebitda_libelle, fm(f.ebitda_s1) + " M" + f.devise], [f.dette_nette != null && f.dette_nette < 0 ? "Trésorerie nette" : "Dette nette", f.dette_nette == null ? "n.d." : fm(Math.abs(f.dette_nette)) + " M" + f.devise],
+       ["DN / EBITDA", f.dn_ebitda == null ? (f.dette_nette != null && f.dette_nette < 0 ? "< 0" : "n.d.") : num(f.dn_ebitda, 1) + "x"], ["Liquidité", f.liquidite == null ? "n.d." : fm(f.liquidite) + " M" + f.devise]];
+  const extra = [f.dette_brute ? `Dette à long terme : ${fm(f.dette_brute)} M${f.devise} (${fm(f.dette_brute_prec)} M${f.devise} fin 2025)` : null,
+    f.dette_nette_prec != null && f.dette_nette > 0 ? `Dette nette fin 2025 : ${fm(f.dette_nette_prec)} M${f.devise}` : null, f.resultat, f.notations,
+    f.type === "entreprises" ? f.cash_flow : null, f.investissements, f.dette_info, f.dn_ebitda_note ? "DN / EBITDA : " + f.dn_ebitda_note : null,
+    f.liquidite_note ? "Liquidité : " + f.liquidite_note : null, f.notes].filter(Boolean);
+  return `<h3 style="margin-top:14px">Fondamentaux <small>${esc(FM.periode)}</small></h3>
+  <div class="minis">${tiles.map(([a, b]) => `<div class="tile"><p>${esc(a)}</p><b>${b}</b></div>`).join("")}</div>
+  <div class="note" style="margin:0 0 8px;color:var(--ink)">${esc(f.lecture)}</div>
+  <div class="flist">${extra.map(t => `<p>${esc(t)}</p>`).join("")}</div>
+  <p class="src">Sources : ${f.sources.map(x => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.titre)}</a>`).join(" · ")}${f.secondaire ? " · source secondaire, à confirmer sur le document de l'émetteur" : ""}</p>`;
+}
+
+/* --- univers et fiche --- */
+const secs = [...new Set(E.map(e => e.secteur))].sort(), pays = [...new Set(E.map(e => e.pays))].sort();
+$("fs").innerHTML = `<option value="">Tous les secteurs</option>` + secs.map(s => `<option>${esc(s)}</option>`).join("");
+$("fc").innerHTML = `<option value="">Tous les pays</option>` + pays.map(s => `<option>${esc(s)}</option>`).join("");
+let current = "INTESA SANPAOLO";
+function renderTable() {
+  const q = norm($("q").value), fs = $("fs").value, fc = $("fc").value, fg = $("fsig").value, fh = $("fheld").value;
+  const rows = E.filter(e => (!q || norm(e.nom).includes(q) || norm(e.id).includes(q)) && (!fs || e.secteur === fs) && (!fc || e.pays === fc) && (!fg || e.signal === fg) && (!fh || weightOf(e.id) > 0))
+    .sort((a, b) => weightOf(b.id) - weightOf(a.id) || a.nom.localeCompare(b.nom, "fr"));
+  $("ecount").textContent = rows.length + " sur " + E.length;
+  $("etable").innerHTML = `<tr><th>Émetteur</th><th>Secteur</th><th>Pays</th><th class="n">Lignes</th><th class="n">Votre poids</th>${HAS_CIQ ? "<th>S&P</th>" : ""}<th>Signal</th></tr>` +
+    rows.map(e => `<tr class="click ${e.id === current ? "sel" : ""}" onclick="renderFiche('${e.id}')"><td>${esc(e.nom)}${e.fondamentaux ? ' <span class="pill neutre">fond.</span>' : ""}</td><td>${esc(e.secteur)}</td><td>${esc(e.pays)}</td><td class="n">${e.lignes.length}</td><td class="n">${weightOf(e.id) ? pct(weightOf(e.id)) : "—"}</td>${HAS_CIQ ? `<td class="${isNeg(e.ciq) ? "r" : ""}" style="white-space:nowrap">${e.ciq && e.ciq.note_sp ? esc(e.ciq.note_sp) + (isNeg(e.ciq) ? " ↓" : /Positive/.test(e.ciq.perspective_sp || "") ? " ↑" : "") : "—"}</td>` : ""}<td>${pill(e.signal)}</td></tr>`).join("");
+}
+function renderFiche(id) {
+  current = id; renderTable();
+  const e = byId[id], w = weightOf(id);
+  const dur = e.lignes.reduce((t, l) => t + l.duration, 0) / e.lignes.length;
+  const al = D.semaine.alertes.filter(a => a.emetteurs.includes(id));
+  $("fiche").innerHTML = `<h2>${esc(e.nom)} ${pill(e.signal)}</h2><p class="sub">${esc(e.secteur)} · ${esc(e.pays)}</p>
+  <div class="filters noprint">${w ? `<span class="pill ras">Dans votre portefeuille : ${pct(w)}</span> <button class="btn" type="button" onclick="removeIssuer('${id}')">Retirer</button>` : `<button class="btn primary" type="button" onclick="addIssuer('${id}')">Ajouter au portefeuille (2 %)</button>`}</div>
+  <div class="minis"><div class="tile"><p>Votre poids</p><b>${w ? pct(w) : "—"}</b></div><div class="tile"><p>Lignes dans l'univers</p><b>${e.lignes.length}</b></div>
+  <div class="tile"><p>Sensibilité moyenne</p><b>${num(dur)}</b></div><div class="tile"><p>Échéance la plus proche</p><b>${fdate(e.lignes.map(l => l.echeance).filter(Boolean).sort()[0])}</b></div></div>
+  <h3>Analyse de la semaine</h3>${al.length ? al.map(a => `<div class="alert">${pill(a.niveau)}<div><b>${esc(a.titre)}</b><p>${esc(a.texte)}</p><div class="src">${esc(a.sources)}</div></div></div>`).join("") : `<div class="note" style="margin:0 0 12px">Aucun événement crédit notable cette semaine.</div>`}
+  ${ficheCiq(e)}
+  ${ficheFond(e)}
+  <h3 style="margin-top:14px">Obligations de l'univers</h3>
+  <table><tr><th>Ligne</th><th>Type</th><th>Échéance</th><th class="n">Sensibilité</th><th>Détenue</th></tr>
+  ${e.lignes.map((l, i) => `<tr><td>${esc(l.libelle)}</td><td>${l.type}</td><td>${l.type === "Hybride perpétuelle" ? (l.anniversaire_call ? "perpétuelle (date anniv. " + fdate(l.anniversaire_call) + ")" : "perpétuelle") : fdate(l.echeance) + (l.approx ? "*" : "")}</td><td class="n">${num(l.duration)}</td><td>${P[id] && P[id].l.includes(i) ? "oui" : "—"}</td></tr>`).join("")}</table>
+  ${e.lignes.some(l => l.approx) ? '<p class="legend">* échéance approximative (année connue).</p>' : ""}
+  <h3 style="margin-top:14px">Actualité récente <small>titres collectés, avant tri par l'IA</small></h3>${e.actualites.length ? `<ul class="tight news">${e.actualites.map(n => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.titre)}</a> <span class="src">${esc(n.source)} · ${fdate(n.date)}</span></li>`).join("")}</ul>` : `<div class="note" style="margin:0">Collecte d'actualités activée pour cet émetteur dans la version automatisée.</div>`}`;
+}
+function ficheCiq(e) {
+  const c = e.ciq; if (!c) return "";
+  const bank = c.cet1 != null, a = c.derniere_action_sp;
+  const t = [["Note S&P", c.note_sp || c.note_sp_brute || "n.d."], ["Perspective", c.perspective_sp || "n.d."], ["Dernière action", a ? a.types[0] + " · " + fdate(a.date) : "n.d."]];
+  const r = bank
+    ? [["CET1", fp(c.cet1)], ["Ratio de solvabilité global", fp(c.ratio_global)], ["Levier (Bâle III)", fp(c.levier_bale3)], ["LCR", c.lcr == null ? "n.d." : num(c.lcr, 0) + " %"],
+       ["Prêts non performants*", fp(c.npl)], ["Couverture*", c.couverture == null ? "n.d." : num(c.couverture, 0) + " %"], ["ROE", fp(c.roe)], ["Prêts / dépôts", c.prets_depots == null ? "n.d." : num(c.prets_depots, 0) + " %"]]
+    : [["Dette nette / EBITDA", c.dn_ebitda == null ? (c.dette_nette_musd != null && c.dette_nette_musd < 0 ? "< 0 (trésorerie nette)" : "n.d.") : num(c.dn_ebitda, 1) + "x"],
+       ["Dette / EBITDA", c.dette_ebitda == null ? "n.d." : num(c.dette_ebitda, 1) + "x"], ["EBITDA / intérêts", c.ebitda_interets == null ? "n.d." : num(c.ebitda_interets, 1) + "x"],
+       ["Devise de publication", c.devise_publication || "n.d."]];
+  if (RATINGS_ONLY) return `<h3 style="margin-top:14px">Notation <small>S&P Global Ratings</small></h3>
+  <div class="minis">${t.map(([x, y]) => `<div class="tile"><p>${x}</p><b class="${x === "Perspective" && isNeg(c) ? "neg" : ""}">${esc(y)}</b></div>`).join("")}</div>
+  <p class="src">Source : ${esc(D.ciq.source)}.</p>`;
+  return `<h3 style="margin-top:14px">Notation et ratios <small>S&P Capital IQ</small></h3>
+  <div class="minis">${t.map(([x, y]) => `<div class="tile"><p>${x}</p><b class="${x === "Perspective" && isNeg(c) ? "neg" : ""}">${esc(y)}</b></div>`).join("")}<div class="tile"><p>Secteur (S&P)</p><b style="font-size:13px">${esc(c.secteur_sp || "n.d.")}</b></div></div>
+  <div class="minis">${r.map(([x, y]) => `<div class="tile"><p>${x}</p><b>${y}</b></div>`).join("")}</div>
+  <p class="src">${esc(D.ciq.source)} · ${bank ? "dernier trimestre publié ; * définitions S&P (la couverture inclut les provisions sur encours sains)" : "douze derniers mois ; définitions S&P (dette incluant les loyers et certains hybrides)"}.</p>`;
+}
+function addIssuer(id) { P[id] = {w: 2, l: allLines(id)}; save(); renderAll(); renderFiche(id); }
+function removeIssuer(id) { delete P[id]; save(); renderAll(); renderFiche(id); }
+["q", "fs", "fc", "fsig", "fheld"].forEach(id => $(id).oninput = renderTable);
+
+/* --- méthodologie --- */
+$("sources").innerHTML = [
+  "Univers d'émetteurs et d'obligations : positions publiées d'un fonds obligataire euro court terme (rapport semestriel public au 30/06/2026), complétées de lignes publiées en septembre 2026.",
+  "Données de marché : " + D.marche.source + ".",
+  "Fondamentaux : publications semestrielles des émetteurs pour les principaux émetteurs (voir chaque fiche)" + (RATINGS_ONLY ? ". Notations : " + D.ciq.source + "." : HAS_CIQ ? " ; notations S&P et ratios de l'univers complet : " + D.ciq.source + ", usage académique. Les ratios bancaires « as reported » ont été recoupés avec les publications des banques ; les définitions S&P de la dette, des NPL et de la couverture peuvent différer de celles des émetteurs." : ". Version publique : les notations et ratios issus de bases de données sous licence ne sont pas inclus."),
+  "Actualités : Google Actualités (français et anglais), collecte du " + fdate(D.semaine.semaine) + ".",
+  D.semaine.statut,
+].map(s => `<li>${esc(s)}</li>`).join("");
+
+/* --- orchestration --- */
+function renderAll(keepTable) {
+  const pos = positions();
+  if (keepTable) $("totals").innerHTML = totalsHtml(); else renderPTable();
+  renderAddSel(); renderSynthese(pos); renderRatingWatch(); renderExposures(pos); scen(); renderVar(pos); renderEcheancier(pos); renderFond(); renderCiqTable(); renderTable();
+}
+if (!load()) P = PRESETS["Exemple diversifié"]();
+renderAll(); renderFiche(current);
+const [hashTab, hashIssuer] = decodeURIComponent(location.hash.slice(1)).split("/");
+if (hashTab === "univers" && hashIssuer && byId[hashIssuer]) { openIssuer(hashIssuer); setTimeout(() => window.scrollTo(0, 0), 0); }
+else if (hashTab && $(hashTab) && $(hashTab).classList.contains("panel")) { show(hashTab); setTimeout(() => window.scrollTo(0, 0), 0); }
+else { try { const t = localStorage.getItem("tab"); if (t && $(t)) show(t); } catch (e) {} }
+</script>
+</body></html>
